@@ -1,4 +1,4 @@
-**[Important Dante Information for Network Administrators](#Important-Dante-Information-for-Network-Administrators)**
+### 1.[Important Dante Information for Network Administrators](#Important-Dante-Information-for-Network-Administrators)
 
 ### Important Dante Information for Network Administrators
 
