@@ -1,3 +1,5 @@
+[### Important Dante Information for Network Administrators](#Important-Dante-Information-for-Network-Administrators)
+
 ### Important Dante Information for Network Administrators
 
 **Addressing Dante Devices**
@@ -5,6 +7,8 @@
 Dante devices use DHCP for addressing when available or will auto-assign an IP address in the 169.254.0.0/16 range on the primary
 network and 172.31.0.0/16 on the secondary network if DHCP is not available. Dante devices continue to look for a DHCP server
 even after auto-assigning an IP address. Most Dante devices support static IP addressing.
+
+A full list of ports used by Dante is available at: www.audinate.com/learning/faqs/which-network-ports-does-dante-use
 
 **Audio Transport and Expected Bandwidth:**
 
@@ -22,15 +26,22 @@ Address| Port| Usage| Type
 Device IP| UDP 14336-14591| Unicast Audio/Video| Unicast
 239.255.0.0/16 UDP 4321| Multicast Audio/Video| Multicast
 
-Video Transport and Expected Bandwidth
+**Video Transport and Expected Bandwidth**
+
 Dante video is optimized to run on Gigabit Ethernet and has a bandwidth cap of 700 Mbps. Video bandwidth is impacted by
 resolution, frame rate, chroma sampling, color bit depth, compression codec used, and varies with content shown. Dante video
 flows must be multicast if video is being sent to more than one destination.
-Device Discovery
+
+**Device Discovery**
+
 mDNS and DNS-SD are used for discovery and enumeration of other Dante devices including Dante Controller.
-Address Port Usage Type
-224.0.0.251 5353 mDNS Multicast
-Synchronization
+
+Address| Port| Usage| Type
+---|---|---|---
+224.0.0.251| 5353| mDNS| Multicast
+
+**Synchronization**
+
 Digital audio requires synchronization for accurate playback of audio samples. Dante uses Precision Time Protocol (PTP version 1,
 IEEE 1588-2002) by default for time synchronization. This generates a few small packets, a few times per second. One clock leader
 is elected on a per subnet basis that sends multicast sync and follow up messages to all followers. Follower devices send delay
@@ -38,15 +49,14 @@ requests back to the leader to determine network delay.
 • Follower devices can be configured to send unicast delay requests to cut down on multicast traffic.
 • Dante does not require PTP aware switches. In most cases Dante does not benefit from enabling boundary clock or
 transparent clock on switches.
-Address Port Usage Type
-224.0.1.129-132 UDP 319, 320 PTP Multicast
-239.254.3.3 UDP 9998 PTP Logging (if enabled) Multicast
+Address| Port| Usage| Type
+---|---|---|---
+224.0.1.129-132| UDP 319, 320| PTP| Multicast
+239.254.3.3| UDP 9998| PTP Logging (if enabled)| Multicast
 
 **Control and Monitoring Traffic**
 
 Dante monitoring and control traffic uses the following ports: 
-
-(A full list of ports used by Dante is available at: www.audinate.com/learning/faqs/which-network-ports-does-dante-use)
 
 **External**
 Address| Port| Usage| Type
