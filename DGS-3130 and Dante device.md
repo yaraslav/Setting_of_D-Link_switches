@@ -1,4 +1,5 @@
 ### 1.[Important Dante Information for Network Administrators](#Important-Dante-Information-for-Network-Administrators)
+### 2.[Switche's settings (DGS-1510/DGS-3130/DGS-3630 series)](#Switche's-settings-(DGS-1510/DGS-3130/DGS-3630 series))
 
 ### Important Dante Information for Network Administrators
 
@@ -101,12 +102,17 @@ Energy Efficient Ethernet (EEE) or ‘Green ethernet’ (IEEE 802.3az) should be
 EEE can result in poor synchronization performance and occasional audio dropouts.
 
 
-Examples of unmanaged switches that have Energy Efficient Ethernet, which we do not recommend using
+>Examples of unmanaged switches that have Energy Efficient Ethernet, which we do not recommend using
 with Dante are listed below
 
-D-Link DGS-105 Unmanaged 10/100/1000Mbps 5-Port Gigabit Switch
-D-Link DGS-1016A 16-Port Unmanaged Gigabit Switch
-D-Link DGS-1024A Unmanaged 10/100/1000Mbps 24-Port Unmanaged Gigabit Switch
+>D-Link DGS-105 Unmanaged 10/100/1000Mbps 5-Port Gigabit Switch 
+>
+>D-Link DGS-1016A 16-Port Unmanaged Gigabit Switch 
+>
+>D-Link DGS-1024A Unmanaged 10/100/1000Mbps 24-Port Unmanaged Gigabit Switch 
+
+
+### Switche's settings (DGS-1510/DGS-3130/DGS-3630 series)
 
 Common requrements - configuration vlan 
 
@@ -128,6 +134,19 @@ DGS-3630-28SC(config-if-range)#no power-saving eee
 
 
 QoS - setting Clocking (PTP),Dante Audio and Control
+
+a. Ensure all queues are set to Strict Priority
+
+Set all DSCP values to queue:
+a. Set DSCP value of 56 (SC7) to enter queue 8.
+c. Set DSCP value of 46 (EF) to enter queue 7.
+d. Set DSCP value of 8 (CS1) to enter queue 6.
+
+Global setting DSCP
+a. Set Trust Mode to DSCP.
+b. Set Default Mode Status to Trusted.
+c. Leave Ingress DSCP should be unchecked.
+
 
 
 
