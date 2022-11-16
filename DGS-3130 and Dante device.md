@@ -112,7 +112,8 @@ with Dante are listed below
 >D-Link DGS-1024A Unmanaged 10/100/1000Mbps 24-Port Unmanaged Gigabit Switch 
 
 
-### Switche's settings 
+### Switche's-settings 
+
 ## (DGS-1510/DGS-3130/DGS-3630 series)
 
 Common requrements - configuration vlan 
