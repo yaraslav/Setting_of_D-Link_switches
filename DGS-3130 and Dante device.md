@@ -116,9 +116,52 @@ with Dante are listed below
 
 ### (DGS-1510/DGS-3130/DGS-3630 series)
 
-Common requrements - configuration vlan 
+First of all. The common requrement is configuring VLANs.  
+Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLAN. These VLANs should be different from "native" VLAN (VLAN1 ID). If required, define access and trunk interfaces.
 
-then 
+```
+DGS-1510-28#configure terminal
+DGS-1510-28(config)#vlan 300
+DGS-1510-28(config-vlan)#name managment
+DGS-1510-28(config-vlan)#exit
+DGS-1510-28(config)#vlan 500
+DGS-1510-28(config-vlan)#name Dante_AVoIP
+DGS-1510-28(config-vlan)#exit
+DGS-1510-28(config)#interface range ethernet 1/0/10-24
+DGS-1510-28(config-if-range)#switchport mode access
+DGS-1510-28(config-if-range)#switchport access vlan 500
+DGS-1510-28(config-if-range)#exit
+DGS-1510-28(config)#interface ethernet 1/0/2
+DGS-1510-28(config-if)#switchport mode access
+DGS-1510-28(config-if)#switchport access vlan 300
+DGS-1510-28(config-if)#exit
+DGS-1510-28(config)#interface ethernet 1/0/28
+DGS-1510-28(config-if)#switchport mode trunk
+DGS-1510-28(config-if)#switchport trunk allowed vlan 300,500
+DGS-1510-28(config-if)#end
+DGS-1510-28#sh vlan
+
+VLAN 1
+   Name : default
+   Description :
+   Tagged Member Ports   : eth1/0/25-1/0/27
+   Untagged Member Ports : eth1/0/1,eth1/0/3-1/0/9
+VLAN 300
+   Name : managment
+   Description :
+   Tagged Member Ports   : 1/0/28
+   Untagged Member Ports : eth1/0/2
+
+ VLAN 500
+   Name : Dante_AVoIP
+   Description :
+   Tagged Member Ports   : 1/0/28
+   Untagged Member Ports : eth1/0/10-1/0/24
+
+ Total Entries : 3
+```
+
+Next step:
 
 Optimizing for Dante Audio-Video Traffic
 
