@@ -172,7 +172,7 @@ Next step:
 
 Optimizing for Dante Audio-Video Traffic
 
-EEE  - it should be disabled. 
+1) EEE  - it should be disabled. 
 Energy Efficient Ethernet (EEE) - this feature is known to interrupt traffic and skew clock
 synchronization. Disabling this feature is always recommended for critical live performance systems.
 
@@ -185,9 +185,13 @@ DGS-3630-28SC(config-if-range)#no power-saving eee
 
 
 
-QoS - setting Clocking (PTP),Dante Audio and Control
+2) QoS - setting Clocking (PTP),Dante Audio and Control
 
 a. Ensure all queues are set to Strict Priority
+ ``` 
+ 
+ ```
+
 
 Set all DSCP values to queue:
 a. Set DSCP value of 56 (SC7) to enter queue 8.
@@ -202,5 +206,5 @@ c. Leave Ingress DSCP should be unchecked.
 
 
 
-IGMP snooping v3
+3) IGMP snooping v3
 
