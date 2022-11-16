@@ -1,5 +1,5 @@
 ### 1.[Important Dante Information for Network Administrators](#Important-Dante-Information-for-Network-Administrators)
-### 2.[Switche's settings (DGS-1510/DGS-3130/DGS-3630 series)](#Switche's-settings)
+### 2.[Switche's settings (DGS-1510/DGS-3130/DGS-3630 series)](#Switche-settings)
 
 ### Important Dante Information for Network Administrators
 
@@ -112,9 +112,9 @@ with Dante are listed below
 >D-Link DGS-1024A Unmanaged 10/100/1000Mbps 24-Port Unmanaged Gigabit Switch 
 
 
-### Switche's-settings 
+### Switche settings 
 
-## (DGS-1510/DGS-3130/DGS-3630 series)
+### (DGS-1510/DGS-3130/DGS-3630 series)
 
 Common requrements - configuration vlan 
 
