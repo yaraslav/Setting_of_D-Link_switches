@@ -119,6 +119,9 @@ with Dante are listed below
 First of all. The common requrement is configuring VLANs.  
 Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLAN. These VLANs should be different from "native" VLAN (VLAN1 ID). If required, define access and trunk interfaces.
 
+<details> 
+<summary>See configuration </summary>
+
 ```
 DGS-1510-28#configure terminal
 DGS-1510-28(config)#vlan 300
@@ -159,7 +162,11 @@ VLAN 300
    Untagged Member Ports : eth1/0/10-1/0/24
 
  Total Entries : 3
+   
 ```
+ 
+   
+</details>
 
 Next step:
 
