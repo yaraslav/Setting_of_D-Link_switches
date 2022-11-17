@@ -116,11 +116,11 @@ with Dante are listed below
 
 ### (DGS-1510/DGS-3130/DGS-3630 series)
 
-First of all. The common requrement is configuring VLANs.  
+First of all. The common requrement is **configuring VLANs.**  
 Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLAN. These VLANs should be different from "native" VLAN (VLAN1 ID). If required, define access and trunk interfaces.
 
 <details> 
-<summary>See configuration </summary>
+<summary>See configuration here</summary>
 
 ```
 DGS-1510-28#configure terminal
@@ -170,7 +170,7 @@ VLAN 300
 
 Next step:
 
-Optimizing for Dante Audio-Video Traffic
+**Optimizing for Dante Audio-Video Traffic**
 
 1) EEE  - it should be disabled. 
 Energy Efficient Ethernet (EEE) - this feature is known to interrupt traffic and skew clock
@@ -183,28 +183,36 @@ DGS-3630-28SC(config)#interface range ethernet 1/0/21-24
 DGS-3630-28SC(config-if-range)#no power-saving eee
 ```
 
-
-
-2) QoS - setting Clocking (PTP),Dante Audio and Control
+2) QoS - setting for Clocking (PTP), Dante Audio and Control
 
 a. Ensure all queues are set to Strict Priority
  ``` 
- 
+ DGS-1510-28(config-if-range)#mls qos scheduler sp
  ```
 
+b. Set all DSCP values to queue 1 (or some value below 5), for now (D-link uses queue from 0 to 7) and then for "Dante Audio-Video Traffic" set:
 
-Set all DSCP values to queue:
-a. Set DSCP value of 56 (SC7) to enter queue 8.
-c. Set DSCP value of 46 (EF) to enter queue 7.
-d. Set DSCP value of 8 (CS1) to enter queue 6.
+- DSCP value of 56 (SC7) to enter queue 7. 
+- DSCP value of 46 (EF) to enter queue 6.
+- DSCP value of 8 (CS1) to enter queue 5. 
 
+```
+DGS-1510-28#con t
+DGS-1510-28(config)#int r e 1/0/10-24
+DGS-1510-28(config-if-range)#mls qos map dscp-cos 0-7,9-45,47-55,57-63 to 1
+DGS-1510-28(config-if-range)#mls qos map dscp-cos 56 to 7
+DGS-1510-28(config-if-range)#mls qos map dscp-cos 46 to 6
+DGS-1510-28(config-if-range)#mls qos map dscp-cos 8 to 5
+```
 Global setting DSCP
 a. Set Trust Mode to DSCP.
 b. Set Default Mode Status to Trusted.
 c. Leave Ingress DSCP should be unchecked.
 
-
-
+ ```
+DGS-1510-28(config)#interface range ethernet 1/0/10-24
+DGS-1510-28(config-if-range)#mls qos trust dscp 
+```
 
 3) IGMP snooping v3
 
