@@ -89,8 +89,8 @@ Medium|Audio, PTP v2|EF| 0x2E |46|101110|
 Low| (reserved)| CS1| 0x08| 8| 001000|
 None| Other traffic| Best effort| 0x00| 0| 000000|
 
-Dante 4.x: Clock is DSCP 46; Audio is DSCP 34 (matches AES67 standard).
-Dante 3.x: Clock is DSCP 56, Audio is DSCP 46 (matches Audinate standard).
+- Dante 4.x: Clock is DSCP 46; Audio is DSCP 34 (matches AES67 standard).
+- Dante 3.x: Clock is DSCP 56, Audio is DSCP 46 (matches Audinate standard).
 
 **Multicast Management**
 
@@ -98,9 +98,9 @@ When Dante resides in mixed networks, those where IP video is on the same networ
 multicast audio is in use, IGMP should be used to assist with multicast management. IGMP is not a requirement for Dante audio
 only networks with few or no multicast audio flows. If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports. If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports.
 If video equipment is present, you will need to Filter Unregistered Multicast Traffic. 
-• Dante implements IGMP v2 or v3
-• One IGMP Querier should be elected per VLAN
-• Query intervals should be short, and time out values long.
+- Dante implements IGMP v2 or v3
+- One IGMP Querier should be elected per VLAN
+- Query intervals should be short, and time out values long.
 
 In this case, you may need to manually add the following multicast groups to the switch's Multicast Forwarding Database to ensure the traffic makes it to all devices:
 
@@ -117,7 +117,7 @@ Static filters ensure that the PTP, mDNS, Discovery, and audio traffic is always
 - mDNS traffic: 224.0.0.251 (01-00-5e-00-00-fb)
 - Shure Discovery: 239.255.254.253 (01-00-5e-7f-fe-fd)
 - Dante Control: 224.0.0.230, 224.0.0.231, 224.0.0.232, and 224.0.0.233 (01-00-5e-00-00-e6, 01-00-5e-00-00-e7, 01-00-5e-00-00-e8, 01-00-5e-00-00-e9)
--  
+
 The specific Dante or AES67 Multicast audio addresses in use. And ensure that Filter Unregistered Multicast is not enabled. Some switches ship with this feature enabled. This blocks traffic that should be allowed (mDNS, PTP, Dante Discovery) and usually results in devices failing to appear in Dante Controller, Shure Update Utility, and Shure Designer.
 
 If you experience intermittent audio, then run a Wireshark trace on a PC connected to the Dante network. It may show IGMP Query messages from multiple sources. Contact Shure Applications Engineering for help interpreting Wireshark traces.
@@ -130,21 +130,17 @@ Energy Efficient Ethernet (EEE) or ‘Green ethernet’ (IEEE 802.3az) should be
 EEE can result in poor synchronization performance and occasional audio dropouts.
 
 
->Examples of unmanaged switches that have Energy Efficient Ethernet, which we do not recommend using
-with Dante are listed below
-
->D-Link DGS-105 Unmanaged 10/100/1000Mbps 5-Port Gigabit Switch 
->
->D-Link DGS-1016A 16-Port Unmanaged Gigabit Switch 
->
->D-Link DGS-1024A Unmanaged 10/100/1000Mbps 24-Port Unmanaged Gigabit Switch 
-
 
 ### Switches settings 
 
 ### (DGS-1510/DGS-3130/DGS-3630 series)
 
-First of all. The common requrement is **configuring VLANs.**  
+First of all. 
+There's some guide for DGS-1210 - via Web-interface. [See here](https://service.shure.com/articles/en_US/Knowledge/configuring-dgs-1210-switch-for-shure-devices-and-dante?r=2916&ui-knowledge-components-aura-actions.KnowledgeArticleVersionCreateDraftFromOnlineAction.createDraftFromOnlineArticle=1)
+
+So, the settings for DGS-1510/DGS-3130/DGS-3630 series via standart CLI (Cisco-like CLI) see below.
+
+First step. The common requrement is **configuring VLANs.**  
 Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLAN. These VLANs should be different from "native" VLAN (VLAN1 ID). If required, define access and trunk interfaces.
 
 <details> 
@@ -242,16 +238,33 @@ DGS-1510-28(config)#interface range ethernet 1/0/10-24
 DGS-1510-28(config-if-range)#mls qos trust dscp 
 ```
 
-3) IGMP snooping v3
+3) Multicast settings 
 
-Configure IGMP Snooping
-
-Enable IGMP Snooping (IGMPv2).
-Enable the IGMP Querier on this switch (if using multiple switches, the core switch should be the querier).
-Verify that the switch has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
+Enable IGMP Snooping (IGMPv2):
+In global configuration on a switch:
+```
+DGS-1510-28#configure terminal
+DGS-1510-28(config)#ip igmp snooping
+```
+And in certain vlan
+```
+DGS-1510-28#configure terminal
+DGS-1510-28(config)#vlan 500
+DGS-1510-28(config-vlan)#ip igmp snooping
+```
+Enable the IGMP Querier on this switch in this vlan (if using multiple switches, the core switch should be the querier).
+```
+DGS-1510-28(config-vlan)#ip igmp snooping querier
+DGS-1510-28(config-vlan)#ip igmp snooping query-version 2
+```
+Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
 Set the Querier IP to the same address as the switch, or 0.0.0.0/Auto if the switch only has one VLAN.
+
 Set the Querier Interval as low as it can go, down to about 30 seconds if your switch supports it.
 Enable Fast Leave (Note: Fast Leave is required to support video-over-IP devices).
+
+DGS-1510-28(config-vlan)#ip igmp snooping fast-leave
+
 See Multicast and IGMP In Depth for more details if desired.
 
 If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports
