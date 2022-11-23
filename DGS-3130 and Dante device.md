@@ -46,8 +46,10 @@ Address| Port| Usage| Type
 Digital audio requires synchronization for accurate playback of audio samples. Dante uses Precision Time Protocol (PTP version 1,
 IEEE 1588-2002) by default for time synchronization. This generates a few small packets, a few times per second. One clock leader
 is elected on a per subnet basis that sends multicast sync and follow up messages to all followers. Follower devices send delay
-requests back to the leader to determine network delay.
+requests back to the leader to determine network delay. [See more here](https://service.shure.com/articles/en_US/Knowledge/what-is-dante-clocking?r=4032&ui-knowledge-components-aura-actions.KnowledgeArticleVersionCreateDraftFromOnlineAction.createDraftFromOnlineArticle=1)
+
 • Follower devices can be configured to send unicast delay requests to cut down on multicast traffic.
+
 • Dante does not require PTP aware switches. In most cases Dante does not benefit from enabling boundary clock or
 transparent clock on switches.
 Address| Port| Usage| Type
@@ -87,14 +89,40 @@ Medium|Audio, PTP v2|EF| 0x2E |46|101110|
 Low| (reserved)| CS1| 0x08| 8| 001000|
 None| Other traffic| Best effort| 0x00| 0| 000000|
 
+Dante 4.x: Clock is DSCP 46; Audio is DSCP 34 (matches AES67 standard).
+Dante 3.x: Clock is DSCP 56, Audio is DSCP 46 (matches Audinate standard).
+
 **Multicast Management**
 
 When Dante resides in mixed networks, those where IP video is on the same network segment, or a significant amount of
 multicast audio is in use, IGMP should be used to assist with multicast management. IGMP is not a requirement for Dante audio
-only networks with few or no multicast audio flows.
+only networks with few or no multicast audio flows. If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports. If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports.
+If video equipment is present, you will need to Filter Unregistered Multicast Traffic. 
 • Dante implements IGMP v2 or v3
 • One IGMP Querier should be elected per VLAN
 • Query intervals should be short, and time out values long.
+
+In this case, you may need to manually add the following multicast groups to the switch's Multicast Forwarding Database to ensure the traffic makes it to all devices:
+
+- 224.0.0.230
+- 224.0.0.231
+- 224.0.0.232
+- 224.0.0.233
+- 224.0.0.251
+- 224.0.1.129
+
+Static filters ensure that the PTP, mDNS, Discovery, and audio traffic is always available throughout the VLAN. IGMP static filters may be required for:
+
+- PTP traffic: 224.0.1.129 (01-00-5e-00-01-81)
+- mDNS traffic: 224.0.0.251 (01-00-5e-00-00-fb)
+- Shure Discovery: 239.255.254.253 (01-00-5e-7f-fe-fd)
+- Dante Control: 224.0.0.230, 224.0.0.231, 224.0.0.232, and 224.0.0.233 (01-00-5e-00-00-e6, 01-00-5e-00-00-e7, 01-00-5e-00-00-e8, 01-00-5e-00-00-e9)
+-  
+The specific Dante or AES67 Multicast audio addresses in use. And ensure that Filter Unregistered Multicast is not enabled. Some switches ship with this feature enabled. This blocks traffic that should be allowed (mDNS, PTP, Dante Discovery) and usually results in devices failing to appear in Dante Controller, Shure Update Utility, and Shure Designer.
+
+If you experience intermittent audio, then run a Wireshark trace on a PC connected to the Dante network. It may show IGMP Query messages from multiple sources. Contact Shure Applications Engineering for help interpreting Wireshark traces.
+Fast Leave will not harm a Dante network and is generally required for Multicast video traffic.
+Avoid IGMP proxies, unless you are CERTAIN you know how it behaves.
 
 **Energy Efficient Ethernet**
 
@@ -215,4 +243,17 @@ DGS-1510-28(config-if-range)#mls qos trust dscp
 ```
 
 3) IGMP snooping v3
+
+Configure IGMP Snooping
+
+Enable IGMP Snooping (IGMPv2).
+Enable the IGMP Querier on this switch (if using multiple switches, the core switch should be the querier).
+Verify that the switch has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
+Set the Querier IP to the same address as the switch, or 0.0.0.0/Auto if the switch only has one VLAN.
+Set the Querier Interval as low as it can go, down to about 30 seconds if your switch supports it.
+Enable Fast Leave (Note: Fast Leave is required to support video-over-IP devices).
+See Multicast and IGMP In Depth for more details if desired.
+
+If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports
+
 
