@@ -89,6 +89,7 @@ Medium|Audio, PTP v2|EF| 0x2E |46|101110|
 Low| (reserved)| CS1| 0x08| 8| 001000|
 None| Other traffic| Best effort| 0x00| 0| 000000|
 
+Note:
 - Dante 4.x: Clock is DSCP 46; Audio is DSCP 34 (matches AES67 standard).
 - Dante 3.x: Clock is DSCP 56, Audio is DSCP 46 (matches Audinate standard).
 
@@ -130,7 +131,6 @@ Energy Efficient Ethernet (EEE) or ‘Green ethernet’ (IEEE 802.3az) should be
 EEE can result in poor synchronization performance and occasional audio dropouts.
 
 
-
 ### Switches settings 
 
 ### (DGS-1510/DGS-3130/DGS-3630 series)
@@ -147,26 +147,26 @@ Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLA
 <summary>See configuration here</summary>
 
 ```
-DGS-1510-28#configure terminal
-DGS-1510-28(config)#vlan 300
-DGS-1510-28(config-vlan)#name managment
-DGS-1510-28(config-vlan)#exit
-DGS-1510-28(config)#vlan 500
-DGS-1510-28(config-vlan)#name Dante_AVoIP
-DGS-1510-28(config-vlan)#exit
-DGS-1510-28(config)#interface range ethernet 1/0/10-24
-DGS-1510-28(config-if-range)#switchport mode access
-DGS-1510-28(config-if-range)#switchport access vlan 500
-DGS-1510-28(config-if-range)#exit
-DGS-1510-28(config)#interface ethernet 1/0/2
-DGS-1510-28(config-if)#switchport mode access
-DGS-1510-28(config-if)#switchport access vlan 300
-DGS-1510-28(config-if)#exit
-DGS-1510-28(config)#interface ethernet 1/0/28
-DGS-1510-28(config-if)#switchport mode trunk
-DGS-1510-28(config-if)#switchport trunk allowed vlan 300,500
-DGS-1510-28(config-if)#end
-DGS-1510-28#sh vlan
+Switch#configure terminal
+Switch(config)#vlan 300
+Switch(config-vlan)#name managment
+Switch(config-vlan)#exit
+Switch(config)#vlan 500
+Switch(config-vlan)#name Dante_AVoIP
+Switchconfig-vlan)#exit
+Switch(config)#interface range ethernet 1/0/10-24
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 500
+Switch(config-if-range)#exit
+Switch(config)#interface ethernet 1/0/2
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 300
+Switch(config-if)#exit
+Switch(config)#interface ethernet 1/0/28
+Switchconfig-if)#switchport mode trunk
+Switch(config-if)#switchport trunk allowed vlan 300,500
+Switch(config-if)#end
+Switch#sh vlan
 
 VLAN 1
    Name : default
@@ -188,8 +188,7 @@ VLAN 300
  Total Entries : 3
    
 ```
- 
-   
+  
 </details>
 
 Next step:
@@ -202,16 +201,16 @@ synchronization. Disabling this feature is always recommended for critical live 
 
 Disable for ports from 21 to 24
 ```
-DGS-3630-28SC#con t
-DGS-3630-28SC(config)#interface range ethernet 1/0/21-24
-DGS-3630-28SC(config-if-range)#no power-saving eee
+Switch#con t
+Switch(config)#interface range ethernet 1/0/21-24
+Switch(config-if-range)#no power-saving eee
 ```
 
 2) QoS - setting for Clocking (PTP), Dante Audio and Control
 
 a. Ensure all queues are set to Strict Priority
  ``` 
- DGS-1510-28(config-if-range)#mls qos scheduler sp
+ Switch(config-if-range)#mls qos scheduler sp
  ```
 
 b. Set all DSCP values to queue 1 (or some value below 5), for now (D-link uses queue from 0 to 7) and then for "Dante Audio-Video Traffic" set:
@@ -221,12 +220,12 @@ b. Set all DSCP values to queue 1 (or some value below 5), for now (D-link uses 
 - DSCP value of 8 (CS1) to enter queue 5. 
 
 ```
-DGS-1510-28#con t
-DGS-1510-28(config)#int r e 1/0/10-24
-DGS-1510-28(config-if-range)#mls qos map dscp-cos 0-7,9-45,47-55,57-63 to 1
-DGS-1510-28(config-if-range)#mls qos map dscp-cos 56 to 7
-DGS-1510-28(config-if-range)#mls qos map dscp-cos 46 to 6
-DGS-1510-28(config-if-range)#mls qos map dscp-cos 8 to 5
+Switch#con t
+Switch(config)#int r e 1/0/10-24
+Switch(config-if-range)#mls qos map dscp-cos 0-7,9-45,47-55,57-63 to 0
+Switch(config-if-range)#mls qos map dscp-cos 56 to 7
+Switch(config-if-range)#mls qos map dscp-cos 46 to 6
+Switch(config-if-range)#mls qos map dscp-cos 8 to 5
 ```
 Global setting DSCP
 a. Set Trust Mode to DSCP.
@@ -234,41 +233,46 @@ b. Set Default Mode Status to Trusted.
 c. Leave Ingress DSCP should be unchecked.
 
  ```
-DGS-1510-28(config)#interface range ethernet 1/0/10-24
-DGS-1510-28(config-if-range)#mls qos trust dscp 
+Switch(config)#interface range ethernet 1/0/10-24
+Switch(config-if-range)#mls qos trust dscp 
 ```
 
 3) Multicast settings 
 
-Enable IGMP Snooping (IGMPv2):
+Enable IGMP Snooping (IGMPv2/v3):
 In global configuration on a switch:
 ```
-DGS-1510-28#configure terminal
-DGS-1510-28(config)#ip igmp snooping
+Switch#configure terminal
+Switch(config)#ip igmp snooping
 ```
 And in certain vlan
 ```
-DGS-1510-28#configure terminal
-DGS-1510-28(config)#vlan 500
-DGS-1510-28(config-vlan)#ip igmp snooping
+Switch#configure terminal
+Switch(config)#vlan 500
+Switch(config-vlan)#ip igmp snooping
 ```
 Enable the IGMP Querier on this switch in this vlan (if using multiple switches, the core switch should be the querier).
 ```
-DGS-1510-28(config-vlan)#ip igmp snooping querier
-DGS-1510-28(config-vlan)#ip igmp snooping query-version 2
+Switch(config-vlan)#ip igmp snooping querier
+Switch(config-vlan)#ip igmp snooping query-version 2
 ```
 Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
 Set the Querier IP (vlan Ip-interface) or 0.0.0.0/Auto if the switch only has one VLAN.
 ```
+Switch(config-vlan)# multicast filtering-mode filter-unregistered
+
 ```
 
 Set the Querier Interval as low as it can go, down to about 30 seconds if your switch supports it.
+```
 
+```
 Enable Fast Leave (Note: Fast Leave is required to support video-over-IP devices).
 
-`DGS-1510-28(config-vlan)#ip igmp snooping fast-leave`
+`Switch(config-vlan)#ip igmp snooping fast-leave`
 
-See Multicast and IGMP In Depth for more details if desired.
+If there is video equipment, set Filtered Unregistered Multicast Traffic
+
 
 If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports
 
