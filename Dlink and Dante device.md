@@ -258,12 +258,15 @@ DGS-1510-28(config-vlan)#ip igmp snooping querier
 DGS-1510-28(config-vlan)#ip igmp snooping query-version 2
 ```
 Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
-Set the Querier IP to the same address as the switch, or 0.0.0.0/Auto if the switch only has one VLAN.
+Set the Querier IP (vlan Ip-interface) or 0.0.0.0/Auto if the switch only has one VLAN.
+```
+```
 
 Set the Querier Interval as low as it can go, down to about 30 seconds if your switch supports it.
+
 Enable Fast Leave (Note: Fast Leave is required to support video-over-IP devices).
 
-DGS-1510-28(config-vlan)#ip igmp snooping fast-leave
+`DGS-1510-28(config-vlan)#ip igmp snooping fast-leave`
 
 See Multicast and IGMP In Depth for more details if desired.
 
