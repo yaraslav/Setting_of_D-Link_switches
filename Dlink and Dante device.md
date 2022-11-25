@@ -166,39 +166,14 @@ switchport mode trunk
 switchport trunk allowed vlan 300,500
 end
 ```
-And check vlan's settings
    
-```
-Switch#sh vlan
-
-VLAN 1
-   Name : default
-   Description :
-   Tagged Member Ports   : eth1/0/25-1/0/27
-   Untagged Member Ports : eth1/0/1,eth1/0/3-1/0/9
-VLAN 300
-   Name : managment
-   Description :
-   Tagged Member Ports   : 1/0/28
-   Untagged Member Ports : eth1/0/2
-
- VLAN 500
-   Name : Dante_AVoIP
-   Description :
-   Tagged Member Ports   : 1/0/28
-   Untagged Member Ports : eth1/0/10-1/0/24
-
- Total Entries : 3
-   
-```
-  
 </details>
 
 Next step:
 
 **Optimizing for Dante Audio-Video Traffic**
 
-**1) EEE  - it should be disabled. 
+**1) EEE  - it should be disabled.** 
 
 Energy Efficient Ethernet (EEE) - this feature is known to interrupt traffic and skew clock
 synchronization. Disabling this feature is always recommended for critical live performance systems.
@@ -211,7 +186,7 @@ no power-saving eee
 end
 ```
 
-**2) QoS - setting for Clocking (PTP), Dante Audio and Control
+**2) QoS - setting for Clocking (PTP), Dante Audio and Control**
 
 a. Ensure all queues are set to Strict Priority
  ``` 
@@ -248,7 +223,7 @@ mls qos trust dscp
 end
 ```
 
-**3) Multicast settings 
+**3) Multicast settings**
 
 Enable IGMP Snooping (IGMPv2/v3):
 In global configuration on a switch:
@@ -317,7 +292,8 @@ vlan 500
 ip igmp snooping fast-leave
 end
 ```
-And finally, check the confiquration
+
+**And finally,** check the confiquration
 
 `show running-config`
 
