@@ -138,7 +138,7 @@ EEE can result in poor synchronization performance and occasional audio dropouts
 First of all. 
 There's some guide for DGS-1210 - via Web-interface. [See here](https://service.shure.com/articles/en_US/Knowledge/configuring-dgs-1210-switch-for-shure-devices-and-dante?r=2916&ui-knowledge-components-aura-actions.KnowledgeArticleVersionCreateDraftFromOnlineAction.createDraftFromOnlineArticle=1)
 
-So, the settings for DGS-1510/DGS-3130/DGS-3630 series via standart CLI (Cisco-like CLI) see below.
+So, you can see below the settings for DGS-1510/DGS-3130/DGS-3630 series via standart CLI (Cisco-like CLI).
 
 First step. The common requrement is **configuring VLANs.**  
 Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLAN. These VLANs should be different from "native" VLAN (VLAN1 ID). If required, define access and trunk interfaces.
@@ -147,25 +147,28 @@ Should be configure minimum two VLANs - "managment" VLAN and "Dante devices" VLA
 <summary>See configuration here</summary>
 
 ```
-Switch#configure terminal
-Switch(config)#vlan 300
-Switch(config-vlan)#name managment
-Switch(config-vlan)#exit
-Switch(config)#vlan 500
-Switch(config-vlan)#name Dante_AVoIP
-Switchconfig-vlan)#exit
-Switch(config)#interface range ethernet 1/0/10-24
-Switch(config-if-range)#switchport mode access
-Switch(config-if-range)#switchport access vlan 500
-Switch(config-if-range)#exit
-Switch(config)#interface ethernet 1/0/2
-Switch(config-if)#switchport mode access
-Switch(config-if)#switchport access vlan 300
-Switch(config-if)#exit
-Switch(config)#interface ethernet 1/0/28
-Switchconfig-if)#switchport mode trunk
-Switch(config-if)#switchport trunk allowed vlan 300,500
-Switch(config-if)#end
+configure terminal
+vlan 300
+name managment
+vlan 500
+name Dante_AVoIP
+exit
+interface range ethernet 1/0/10-24
+switchport mode access
+switchport access vlan 500
+exit
+interface ethernet 1/0/2
+switchport mode access
+switchport access vlan 300
+exit
+interface ethernet 1/0/28
+switchport mode trunk
+switchport trunk allowed vlan 300,500
+end
+```
+And check vlan's settings
+   
+```
 Switch#sh vlan
 
 VLAN 1
@@ -195,22 +198,27 @@ Next step:
 
 **Optimizing for Dante Audio-Video Traffic**
 
-1) EEE  - it should be disabled. 
+**1) EEE  - it should be disabled. 
+
 Energy Efficient Ethernet (EEE) - this feature is known to interrupt traffic and skew clock
 synchronization. Disabling this feature is always recommended for critical live performance systems.
 
 Disable for ports from 21 to 24
 ```
-Switch#con t
-Switch(config)#interface range ethernet 1/0/21-24
-Switch(config-if-range)#no power-saving eee
+configure terminal
+interface range ethernet 1/0/21-24
+no power-saving eee
+end
 ```
 
-2) QoS - setting for Clocking (PTP), Dante Audio and Control
+**2) QoS - setting for Clocking (PTP), Dante Audio and Control
 
 a. Ensure all queues are set to Strict Priority
  ``` 
- Switch(config-if-range)#mls qos scheduler sp
+configure terminal
+interface range ethernet 1/0/21-24
+mls qos scheduler sp
+end
  ```
 
 b. Set all DSCP values to queue 1 (or some value below 5), for now (D-link uses queue from 0 to 7) and then for "Dante Audio-Video Traffic" set:
@@ -220,60 +228,101 @@ b. Set all DSCP values to queue 1 (or some value below 5), for now (D-link uses 
 - DSCP value of 8 (CS1) to enter queue 5. 
 
 ```
-Switch#con t
-Switch(config)#int r e 1/0/10-24
-Switch(config-if-range)#mls qos map dscp-cos 0-7,9-45,47-55,57-63 to 0
-Switch(config-if-range)#mls qos map dscp-cos 56 to 7
-Switch(config-if-range)#mls qos map dscp-cos 46 to 6
-Switch(config-if-range)#mls qos map dscp-cos 8 to 5
+configure terminal
+interface range ethernet 1/0/21-24
+mls qos map dscp-cos 0-7,9-45,47-55,57-63 to 0
+mls qos map dscp-cos 56 to 7
+mls qos map dscp-cos 46 to 6
+mls qos map dscp-cos 8 to 5
+end
 ```
 Global setting DSCP
 a. Set Trust Mode to DSCP.
-b. Set Default Mode Status to Trusted.
-c. Leave Ingress DSCP should be unchecked.
+b. Set Default Mode Status to Trusted (if the switch supports it)
+c. Leave Ingress DSCP should be unchecked (if the switch supports it)
 
- ```
-Switch(config)#interface range ethernet 1/0/10-24
-Switch(config-if-range)#mls qos trust dscp 
+```
+configure terminal
+interface range ethernet 1/0/21-24
+mls qos trust dscp 
+end
 ```
 
-3) Multicast settings 
+**3) Multicast settings 
 
 Enable IGMP Snooping (IGMPv2/v3):
 In global configuration on a switch:
 ```
-Switch#configure terminal
-Switch(config)#ip igmp snooping
+configure terminal
+ip igmp snooping
+end
 ```
-And in certain vlan
+And in a certain vlan
 ```
-Switch#configure terminal
-Switch(config)#vlan 500
-Switch(config-vlan)#ip igmp snooping
+configure terminal
+vlan 500
+ip igmp snooping
+end
 ```
 Enable the IGMP Querier on this switch in this vlan (if using multiple switches, the core switch should be the querier).
 ```
-Switch(config-vlan)#ip igmp snooping querier
-Switch(config-vlan)#ip igmp snooping query-version 2
+configure terminal
+vlan 500
+ip igmp snooping querier
+ip igmp snooping query-version 2
+end
 ```
-Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
-Set the Querier IP (vlan Ip-interface) or 0.0.0.0/Auto if the switch only has one VLAN.
-```
-Switch(config-vlan)# multicast filtering-mode filter-unregistered
-
-```
-
 Set the Querier Interval as low as it can go, down to about 30 seconds if your switch supports it.
 ```
+configure terminal
+vlan 500
+ip igmp snooping query-interval 30
+end
+```
+Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
+
+Set the Querier IP (vlan Ip-interface) or 0.0.0.0/Auto if the switch only has one VLAN.
+```
+configure terminal
+interface vlan 500
+ip address 192.168.5.1 255.255.255.0
+end
+```
+If there is video equipment, set Filtered Unregistered Multicast Traffic.
+
+If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports.
+
+So, set multicast filtering for unregistered multicast groups...
 
 ```
+configure terminal
+vlan 500
+multicast filtering-mode filter-unregistered
+end
+```
+or for forwarding unregistered multicast groups.
+
+```
+configure terminal
+vlan 500
+multicast filtering-mode forward-unregistered
+end
+```
+
 Enable Fast Leave (Note: Fast Leave is required to support video-over-IP devices).
 
-`Switch(config-vlan)#ip igmp snooping fast-leave`
+```
+configure terminal
+vlan 500
+ip igmp snooping fast-leave
+end
+```
+And finally, check the confiquration! 
 
-If there is video equipment, set Filtered Unregistered Multicast Traffic
+`show running-config`
 
 
-If there is no video equipment, set the switch to Forward Unregistered Multicast Traffic on all Shure, Dante, and AES67 ports
+
+
 
 
