@@ -317,10 +317,13 @@ vlan 500
 ip igmp snooping fast-leave
 end
 ```
-And finally, check the confiquration! 
+And finally, check the confiquration
 
 `show running-config`
 
+and save this configuration!
+
+`copy running-config startup-config`
 
 
 
