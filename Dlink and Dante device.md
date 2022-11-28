@@ -295,11 +295,15 @@ end
 
 **And finally,** check the confiquration
 
-```show running-config```
+```
+show running-config
+```
 
 and save this configuration!
 
-```copy running-config startup-config```
+```
+copy running-config startup-config
+```
 
 
 
