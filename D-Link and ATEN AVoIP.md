@@ -3,13 +3,14 @@
 
 ### Important ATEN Information for Network Administrators
 
+In this case it uses 
 **Addressing ATEN Devices**
 
-Dante devices use DHCP for addressing when available or will auto-assign an IP address in the 169.254.0.0/16 range on the primary
-network and 172.31.0.0/16 on the secondary network if DHCP is not available. Dante devices continue to look for a DHCP server
-even after auto-assigning an IP address. Most Dante devices support static IP addressing.
+ATEN devices use DHCP for addressing or auto-assign or manual-assign addressing.
 
 A full list of ports used by Dante is available at: www.audinate.com/learning/faqs/which-network-ports-does-dante-use
+
+https://assets.aten.com/product/manual/ve8900-ve8950-ve8952_um_2022-05-30.pdf
 
 **Audio Transport and Expected Bandwidth:**
 
