@@ -3,7 +3,12 @@
 
 ### Important ATEN Information for Network Administrators
 
-In this case it uses 
+In this case it uses HDMI/USB Extender `ATEN VE8952` (VE8952T/VE8952R).
+
+See more information about setting device ane common requirements for network here: http://assets.aten.com/product/manual/VE89_Implementation_Guide.pdf
+
+ and here: https://assets.aten.com/product/manual/ve8900-ve8950-ve8952_um_2022-05-30.pdf
+ 
 **Addressing ATEN Devices**
 
 ATEN devices use DHCP for addressing or auto-assign or manual-assign addressing.
