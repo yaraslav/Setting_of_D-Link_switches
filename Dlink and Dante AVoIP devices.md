@@ -3,6 +3,8 @@
 
 ### Important Dante Information for Network Administrators
 
+In this case it uses ANI-series "Dante" devices.  
+
 **Addressing Dante Devices**
 
 Dante devices use DHCP for addressing when available or will auto-assign an IP address in the 169.254.0.0/16 range on the primary
