@@ -3,7 +3,7 @@
 
 ### Important Dante Information for Network Administrators
 
-In this case it uses ANI-series "Dante" devices.  
+In this case it uses `ANI-series` "Dante" devices.  
 
 **Addressing Dante Devices**
 
