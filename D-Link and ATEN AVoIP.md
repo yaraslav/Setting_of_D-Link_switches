@@ -59,7 +59,7 @@ EEE can result in poor synchronization performance and occasional audio dropouts
 ### (DGS-1510/DGS-3130/DGS-3630 series)
 
 First of all. 
-There's some guide for DGS-1510 - via Web-interface. [See here]()
+There's some guide for DGS-1510 - via Web-interface. [See here](https://github.com/yaraslav/Setting_of_D-Link_switches/blob/main/ATEN%2BDLink-1510.pdf)
 
 So, I show below the settings for DGS-1510/DGS-3130/DGS-3630 series via standart CLI (Cisco-like CLI).
 
