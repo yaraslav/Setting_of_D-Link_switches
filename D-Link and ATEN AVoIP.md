@@ -27,9 +27,12 @@ No information
 
 **Control and Monitoring Traffic**
 
-No information
+- ATEN Control: 225.1.0.0 (01:00:5e:01:00:00), source port (60002-6000*) destination port - any??
+- ATEN Control: TCP device-to-device address, source port - any  destination port- any ????
 
 **Multicast Management**
+
+ATEN devices use multicast groups 225.10.0.0 - 225.?.?.? 
 
 - ATEN implements IGMP v2 or v3
 - One IGMP Querier should be elected per VLAN
@@ -39,14 +42,7 @@ No information
 
 In this case, you may need to manually add the following multicast groups to the switch's Multicast Forwarding Database to ensure the traffic makes it to all devices:
 
-- 225.0.0.1
-- 225.10.0.1 - 225.???.0.1 
-
-
-Static filters ensure that the PTP, mDNS, Discovery, and audio traffic is always available throughout the VLAN. IGMP static filters may be required for:
-
-- PTP traffic: 224.0.1.129 (01-00-5e-00-01-81) ????
-- ATEN Control: 224.0.0.230, 224.0.0.231, 224.0.0.232, and 2 24.0.0.233 (01-00-5e-00-00-e6, 01-00-5e-00-00-e7, 01-00-5e-00-00-e8, 01-00-5e-00-00-e9) ?????
+- 225.1.0.0 (01:00:5e:01:00:00)
 
 **Energy Efficient Ethernet**
 
