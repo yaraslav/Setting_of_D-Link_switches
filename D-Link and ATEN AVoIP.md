@@ -26,6 +26,13 @@ And also it needs to enable Jambo Frame ports and Flow Control on Ethernet.
 No information
 
 **Control and Monitoring Traffic**
+ATEN Control and Managment
+
+Address| Port| Usage| Type
+---|---|---|---
+225.1.0.0 | UDP 60000-60000*|Control and Monitoring| Multicast
+Device IP| TCP src.port 9000-900*|Control and Monitoring| Unicast
+Device IP| TCP dst.port any ????|Control and Monitoring| Unicast
 
 - ATEN Control: 225.1.0.0 (01:00:5e:01:00:00), source port (60002-6000*) destination port - any??
 - ATEN Control: TCP device-to-device address, source port - any  destination port- any ????
