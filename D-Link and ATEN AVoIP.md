@@ -30,9 +30,9 @@ ATEN Control and Managment
 
 Address| Port| Usage| Type
 ---|---|---|---
-225.1.0.0 | UDP 60000-6000*|Control and Monitoring| Multicast
-Device IP| TCP src.port 9000-900*|Control and Monitoring| Unicast
-Device IP| TCP dst.port any ????|Control and Monitoring| Unicast
+225.1.0.0 | UDP 60000-6000*|Control and Monitoring via Telnet| Multicast
+Device IP| TCP src.port 9000-900*|Control and Monitoring via Web-App| Unicast
+Device IP| TCP dst.port any ????|Control and Monitoring via Web-App| Unicast 
 
 **Multicast Management**
 
