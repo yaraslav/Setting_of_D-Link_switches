@@ -1,7 +1,7 @@
 ### 1.[Important Dante Information for Network Administrators](#Important-Dante-Information-for-Network-Administrators)
 ### 2.[Switches settings (DGS-1510/DGS-3130/DGS-3630 series)](#Switches-settings)
 
-### Important Dante Information for Network Administrators
+###  `rgb(9, 105, 218)` Important Dante Information for Network Administrators
 
 In this case it uses `ANI-series` "Dante" devices.  
 
