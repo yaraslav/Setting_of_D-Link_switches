@@ -24,3 +24,112 @@ Switch(config-line)#end
 Switch#
 ```
 
+
+
+
+Пример конфигурации
+Для закрепления материала приведем обобщающий пример настройки доступа
+для роутера с использованием ААА-сервера:
+1) Задаем пароль на *enable* и создаем пользователя
+Router#configure terminal
+Router(config)#enable secret cisco
+Router(config)#username admin privilege 1 secret cisco
+Router(config)#service password-encryption
+Router(config)#no service password-recovery
+2) Задаем *hostname* и банер
+Router(config)# hostname R1
+R1(config)#banner exec c
+Enter TEXT message. End with the character 'c'.
+Test banner for NetSkills
+c
+R1(config)#
+3) Настраиваем *SSH*
+Router(config)#ip domain-name netskills.ru
+Router(config)#crypto key generate rsa modulus 1024
+Router(config)#ip ssh version 2
+Router(config)#ip ssh time-out 15
+Router(config)#ip ssh logging events
+Router(config)#line vty 0 4
+Router(config-line)#transport input ssh
+Router(config-line)#exec-timeout 5 0
+Router(config-line)#exit
+4) Отключаем *HTTP* и *HTTPS*
+Router(config)#no ip http secure-server
+Router(config)#no ip http server
+5) Ограничиваем доступ для определенных ip-адресов
+Router(config)#ip access-list standard SSH-ACCESS
+Router(config-std-nacl)#permit host 192.168.2.2
+Router(config-std-nacl)#permit host 192.168.2.3
+Router(config-std-nacl)#exit
+Router(config)#line vty 0 4
+Router(config-line)#access-class SSH-ACCESS in
+6) Настраиваем защиту от *brute force*
+Router(config)#login delay 5
+Router(config)#login block-for 60 attempts 3 within 30
+7) Настраиваем *ААА*
+52R1(config)#aaa new-model
+R1(config)#tacacs-server host 192.168.56.101
+R1(config)#tacacs-server key cisco123
+R1(config)#aaa authentication login default group tacacs+ local
+R1(config)#aaa authorization exec default group tacacs+ local
+R1(config)#aaa authorization config-command
+R1(config)#aaa authorization commands 1 default group tacacs+ local
+R1(config)#aaa authorization commands 15 default group tacacs+ local
+R1(config)#aaa authorization console
+R1(config)#aaa accounting exec default start-stop group tacacs+
+R1(config)#aaa accounting commands 1 default start-stop group tacacs+
+R1(config)#aaa accounting commands 15 default start-stop group tacacs+
+
+Настройка *Buffered Logging* и уровня логирования
+Router(config)# logging on
+Router(config)# logging buffered 32768
+Router(config)# logging buffered informational
+2) Настройка *Syslog-сервера* и уровня логирования
+Router(config)#logging host 192.168.1.100
+Router(config)#logging trap informational
+3) Ограничение количества логов с одного устройства
+Router(config)#logging rate-limit all 50
+4) Настройка времени
+Router(config)#ntp server 192.168.1.100
+Router(config)#clock timezone MSK 4
+Router(config)#service timestamps log datetime msec localtime show-timezone
+5) Резервирование оперативной памяти для консольного подключения
+Router(config)#memory reserve console 4096
+6) Настройка резервного копирования конфигурации на SCP-сервер
+Router(config)#archive
+Router(config-archive)#path scp://user:password@192.168.1.100/Cisco-Conf/$h-$t
+Router(config-archive)#maximum 14
+Router(config-archive)#time-period 1440
+Router(config-archive)#write-memory
+7) Настройка логирования команд (в случае отсутствия ААА-сервера)
+Router(config)#archive
+Router(config-archive)#log config
+Router(config-archive-log-cfg)#logging enable
+Router(config-archive-log-cfg)#logging size 200
+Router(config-archive-log-cfg)#hidekeys
+Router(config-archive-log-cfg)#notify syslog
+8) Отключение "лишних" сервисов
+no service tcp-small-servers echo
+no service tcp-small-servers discard
+no service tcp-small-servers daytime
+no service tcp-small-servers chargen
+no service udp-small-servers echo
+no service udp-small-servers discard
+no service udp-small-servers daytime
+no service udp-small-servers chargen
+no ip finger
+no ip bootp server
+no ip dhcp boot ignore
+no service dhcp
+no mop enabled
+no ip domain-lookup
+68no service pad
+no ip http server
+no ip http secure-server
+no service config
+no cdp enable
+no cdp run
+no lldp transmit
+no lldp receive
+no lldp run global
+
