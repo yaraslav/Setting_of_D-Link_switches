@@ -30,20 +30,32 @@ Switch#
 Пример конфигурации
 Для закрепления материала приведем обобщающий пример настройки доступа
 для роутера с использованием ААА-сервера:
+
 1) Задаем пароль на *enable* и создаем пользователя
+```
 Router#configure terminal
+
 Router(config)#enable secret cisco
+
 Router(config)#username admin privilege 1 secret cisco
+
 Router(config)#service password-encryption
+
 Router(config)#no service password-recovery
+```
+
 2) Задаем *hostname* и банер
+```
 Router(config)# hostname R1
 R1(config)#banner exec c
 Enter TEXT message. End with the character 'c'.
 Test banner for NetSkills
 c
 R1(config)#
+```
+
 3) Настраиваем *SSH*
+```
 Router(config)#ip domain-name netskills.ru
 Router(config)#crypto key generate rsa modulus 1024
 Router(config)#ip ssh version 2
@@ -53,9 +65,14 @@ Router(config)#line vty 0 4
 Router(config-line)#transport input ssh
 Router(config-line)#exec-timeout 5 0
 Router(config-line)#exit
+```
+
 4) Отключаем *HTTP* и *HTTPS*
+```
 Router(config)#no ip http secure-server
 Router(config)#no ip http server
+```
+
 5) Ограничиваем доступ для определенных ip-адресов
 Router(config)#ip access-list standard SSH-ACCESS
 Router(config-std-nacl)#permit host 192.168.2.2
