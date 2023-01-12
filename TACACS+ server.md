@@ -41,6 +41,10 @@ Let’s clarify it:
 So, now that we know which file is for what, let’s go to the next step.
 
 Configure the authentication options in `tac_plus.conf`
+Now we will proceed to edit the tac_plus.conf file but before that we must backup to original file to refer to in case anything breaks.
+```
+sudo cp /etc/tacacs+/tac_plus.conf /etc/tacacs+/tac_plus.conf.old
+```
 Adding a key:
 The first thing that needs to be created is a key for the network devices. A single key can be configured for all network devices or multiple keys can be configured per device. The option is up to the user but this guide will use a single key for simplicity’s sake.
 
