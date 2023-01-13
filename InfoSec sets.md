@@ -25,11 +25,16 @@ login authentication VTY
 end 
 
 ```
+```
+tacacs-server host 10.90.90.51 timeout 5 key testing123
+aaa group server tacacs+ TACACS
+server 10.90.90.51
+aaa accounting system default start-stop group tacacs+
+aaa accounting exec default start-stop group tacacs+
 
 ```
 
 
-```
 
 
 
