@@ -18,6 +18,7 @@ aaa authentication enable default enable
 line console
 login authentication CONSOLE
 exit
+line telnet
 login authentication VTY
 exit
 line ssh
