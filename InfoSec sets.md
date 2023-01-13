@@ -12,20 +12,24 @@ username AdminUser password User
 username OperatorUser password Operator
 enable password Enable
 service password-encryption 15
-aaa authentication login default local
+aaa authentication login CONSOLE local
+aaa authentication login VTY group tacacs+ local
 aaa authentication enable default enable
 line console
-login authentication default
+login authentication CONSOLE
 exit
-line telnet
-login authentication default
+login authentication VTY
 exit
 line ssh
-login authentication default
+login authentication VTY
 end 
 
 ```
 
+```
+
+
+```
 
 
 
