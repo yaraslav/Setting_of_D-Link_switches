@@ -10,8 +10,7 @@ username Admin privilege 15
 username Admin password Admin
 username AdminUser password User
 username OperatorUser password Operator
-enable password 15 Enable
-enable password 12 Operator
+enable password Enable
 service password-encryption 15
 aaa authentication login CONSOLE local
 aaa authentication login VTY group tacacs+ local
@@ -36,6 +35,9 @@ aaa accounting exec default start-stop group tacacs+
 
 ```
 
+```
+
+```
 
 
 
