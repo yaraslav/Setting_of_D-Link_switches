@@ -1,4 +1,4 @@
-Enable AAA-mode, delete default users and `enable-mode` credentails setting, set new credentails and method of authentication for CLI-line. 
+Enable AAA-mode, delete default users, credentails settings `enable-mode` and set new users, credentails and method of authentication for CLI-line (console/VTY) via a TACACS+ server and via a local base (redundant mode). 
 
 ```
 configure terminal
@@ -40,20 +40,9 @@ aaa accounting exec default start-stop group tacacs+
 
 
 
-Пример конфигурации
-Для закрепления материала приведем обобщающий пример настройки доступа
-для роутера с использованием ААА-сервера:
 
-1) Задаем пароль на *enable* и создаем пользователя
+1) Задаем пароль на *enable* и создаем пользователя и отключаем востановление пароля
 ```
-Router#configure terminal
-
-Router(config)#enable secret cisco
-
-Router(config)#username admin privilege 1 secret cisco
-
-Router(config)#service password-encryption
-
 Router(config)#no service password-recovery
 ```
 
@@ -67,18 +56,7 @@ c
 R1(config)#
 ```
 
-3) Настраиваем *SSH*
-```
-Router(config)#ip domain-name netskills.ru
-Router(config)#crypto key generate rsa modulus 1024
-Router(config)#ip ssh version 2
-Router(config)#ip ssh time-out 15
-Router(config)#ip ssh logging events
-Router(config)#line vty 0 4
-Router(config-line)#transport input ssh
-Router(config-line)#exec-timeout 5 0
-Router(config-line)#exit
-```
+`enable-mode`
 
 4) Отключаем *HTTP* и *HTTPS*
 ```
@@ -96,7 +74,7 @@ Router(config)#line vty 0 4
 Router(config-line)#access-class SSH-ACCESS in
 ```
 
-6) Настраиваем защиту от *brute force*
+6) Настраиваем защиту от *brute force* - максимальное количество допустимых попыток доступа и таймаут блокировки.
 ```
 Router(config)#login delay 5
 Router(config)#login block-for 60 attempts 3 within 30
