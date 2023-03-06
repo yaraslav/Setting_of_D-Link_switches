@@ -12,7 +12,7 @@ username AdminUser password User
 username OperatorUser password Operator
 enable password 15 Enable
 enable password 12 Operator
-service password-encryption 15
+service password-encryption
 aaa authentication login CONSOLE local
 aaa authentication login VTY group tacacs+ local
 aaa authentication enable default enable
@@ -35,6 +35,17 @@ aaa accounting system default start-stop group tacacs+
 aaa accounting exec default start-stop group tacacs+
 
 ```
+
+```
+configure terminal
+interface mgmt 0
+ip address 192.168.105.182 255.255.255.0
+ip default-gateway 192.168.105.1
+exit 
+interface vlan 1
+ip address 10.90.90.80 255.255.255.0
+exit 
+
 
 
 
