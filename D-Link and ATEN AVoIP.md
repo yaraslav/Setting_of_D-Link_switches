@@ -165,7 +165,7 @@ vlan 500
 ip igmp snooping query-interval 30
 end
 ```
-Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your Dante/AES67 equipment.
+Verify that IP-interface in this vlan has an IP Address in the same subnet (IP address range) as your ATEN equipment.
 
 Set the Querier IP (vlan Ip-interface) or 0.0.0.0/Auto if the switch only has one VLAN.
 ```
