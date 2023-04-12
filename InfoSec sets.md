@@ -44,16 +44,30 @@ configure terminal
 ip ssh server
 ip ssh timeout 120
 ip ssh authentication-retries 2
+
+```
+
+```
 no ip telnet server 
 ```
 
 ```
 
+Ограничиваем доступ для определенных ip-адресов
+ip access-list standard SSH-ACCESS
+permit host 192.168.2.2
+permit host 192.168.2.3
+exit
 
+access-class SSH-ACCESS in
 
 
 
 ```
+
+
+
+
 configure terminal
 interface mgmt 0
 ip address 192.168.105.182 255.255.255.0
