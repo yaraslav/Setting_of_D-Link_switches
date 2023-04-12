@@ -10,7 +10,7 @@ username Admin privilege 15
 username Admin password Admin
 username AdminUser password User
 username OperatorUser password Operator
-enable password 15 Enable
+enable password level 15 Enable
 enable password 12 Operator
 service password-encryption
 aaa authentication login CONSOLE local
@@ -28,13 +28,30 @@ end
 
 ```
 ```
+configure terminal 
 tacacs-server host 10.90.90.51 timeout 5 key testing123
 aaa group server tacacs+ TACACS
 server 10.90.90.51
 aaa accounting system default start-stop group tacacs+
 aaa accounting exec default start-stop group tacacs+
+end
+```
+```
+crypto key generate rsa modulus 2048
+```
+```
+configure terminal
+ip ssh server
+ip ssh timeout 120
+ip ssh authentication-retries 2
+no ip telnet server 
+```
 
 ```
+
+
+
+
 
 ```
 configure terminal
