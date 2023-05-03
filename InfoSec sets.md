@@ -52,6 +52,21 @@ no ip telnet server
 ```
 
 ```
+configure terminal
+ip http authentication aaa login-authentication WEB
+ip http service-port 33333
+
+
+
+
+crypto pki trustpoint TEST
+
+crypto pki import TEST pem tftp: //10.90.90.51/cacert both
+ssl-service-policy WEB
+ip http secure-server ssl-service-policy 
+
+
+
 
 Ограничиваем доступ для определенных ip-адресов
 ip access-list standard SSH-ACCESS
@@ -61,21 +76,12 @@ exit
 
 access-class SSH-ACCESS in
 
-
-
 ```
 
 
 
 
-configure terminal
-interface mgmt 0
-ip address 192.168.105.182 255.255.255.0
-ip default-gateway 192.168.105.1
-exit 
-interface vlan 1
-ip address 10.90.90.80 255.255.255.0
-exit 
+
 
 
 
