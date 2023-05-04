@@ -15,6 +15,7 @@ enable password 12 Operator
 service password-encryption
 aaa authentication login CONSOLE local
 aaa authentication login VTY group tacacs+ local
+aaa authentication login WEB group tacacs+ local
 aaa authentication enable default enable
 line console
 login authentication CONSOLE
