@@ -65,9 +65,8 @@ ssl-service-policy WEB
 ssl-service-policy WEB secure-trustpoint TEST
 ip http secure-server ssl-service-policy WEB
 
-
-
-
+```
+```
 configure terminal
 ip access-list TELNET-ACCESS
 10 permit host 10.90.90.190 host 10.90.90.180
@@ -79,62 +78,8 @@ exit
 line telnet 
 access-class TELNET-ACCESS
 
+```
 
-
-Standard IP access list TELNET-ACCESS(ID: 1999)
-    10 permit host 10.90.90.200 host 10.90.90.180
-    20 permit host 172.16.0.190 host 172.16.0.180
-    30 deny any any
-    40 permit host 10.90.90.190 host 10.90.90.180
-  trusrhost for telnet
-
-DGS-1510-28X(config-ip-acl)#no 30
-DGS-1510-28X(config-ip-acl)#deny any any 
-DGS-1510-28X(config-ip-acl)#do sh access-list ip                      
-
-Standard IP access list TELNET-ACCESS(ID: 1999)
-    10 permit host 10.90.90.200 host 10.90.90.180
-    20 permit host 172.16.0.190 host 172.16.0.180
-    30 deny any any
-    40 permit host 10.90.90.190 host 10.90.90.180
-  trusrhost for telnet
-
-DGS-1510-28X(config-ip-acl)#no 30        
-DGS-1510-28X(config-ip-acl)#
-DGS-1510-28X(config-ip-acl)#
-DGS-1510-28X(config-ip-acl)#do sh access-list ip
-
-Standard IP access list TELNET-ACCESS(ID: 1999)
-    10 permit host 10.90.90.200 host 10.90.90.180
-    20 permit host 172.16.0.190 host 172.16.0.180
-    40 permit host 10.90.90.190 host 10.90.90.180
-  trusrhost for telnet
-
-DGS-1510-28X(config-ip-acl)#deny                
-Incomplete command
-DGS-1510-28X(config-ip-acl)#deny ?
-  A.B.C.D  Source address
-  any      Any source host
-  host     A single host address
-
-DGS-1510-28X(config-ip-acl)#?    
-  <1-65535>    Sequence Number
-  deny         Specify packets to reject
-  exit         Exit from IP access-list standard configuration mode
-  help         Description of the interactive help system
-  list-remark  Add remarks for the specified ACL
-  no           Negate a command or set its defaults
-  permit       Specify packets to forward
-
-DGS-1510-28X(config-ip-acl)#50 deny any any 
-DGS-1510-28X(config-ip-acl)#do sh access-list ip
-
-Standard IP access list TELNET-ACCESS(ID: 1999)
-    10 permit host 10.90.90.200 host 10.90.90.180
-    20 permit host 172.16.0.190 host 172.16.0.180
-    40 permit host 10.90.90.190 host 10.90.90.180
-    50 deny any any
-  trusrhost for telnet
 
 
 
