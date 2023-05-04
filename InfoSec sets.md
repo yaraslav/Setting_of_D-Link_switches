@@ -69,7 +69,7 @@ ip http secure-server ssl-service-policy WEB
 ```
 ```
 configure terminal
-ip access-list TELNET-ACCESS
+ip access-list VTY-ACCESS
 10 permit host 10.90.90.190 host 10.90.90.180
 20 permit host 172.16.0.190 host 172.16.0.180
 30 deny any any
@@ -77,7 +77,7 @@ list-remark trust host for telnet
 exit 
 
 line telnet 
-access-class TELNET-ACCESS
+access-class VTY-ACCESS
 end 
 
 ```
