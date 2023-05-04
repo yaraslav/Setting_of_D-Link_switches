@@ -77,6 +77,7 @@ exit
 
 line telnet 
 access-class TELNET-ACCESS
+end 
 
 ```
 
