@@ -57,13 +57,17 @@ ip http authentication aaa login-authentication WEB
 ip http service-port 33333
 
 
-
-
+configure terminal
 crypto pki trustpoint TEST
 
 crypto pki import TEST pem tftp: //10.90.90.51/cacert both
 ssl-service-policy WEB
-ip http secure-server ssl-service-policy 
+ssl-service-policy WEB secure-trustpoint TEST
+ip http secure-server ssl-service-policy WEB
+
+
+
+
 
 
 
