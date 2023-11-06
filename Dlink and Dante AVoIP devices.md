@@ -16,11 +16,14 @@ A full list of ports used by Dante is available at: www.audinate.com/learning/fa
 **Audio Transport and Expected Bandwidth:**
 
 Most audio used in professional settings is PCM (uncompressed), sampled at 48 kHz, and a bit depth (word length) of 24 bits. Dante audio is unicast by default but can be set to multicast for cases of one-to-many distribution.
+
 • Dante packages audio into flows to save on network overhead.
-• Unicast Audio flows contain up to 4 channels. The samples-per-channel can vary between 4 and 64, depending on the
-latency setting of the device. Bandwidth usage is about 6 Mbps per typical unicast audio flow.
+
+• Unicast Audio flows contain up to 4 channels. The samples-per-channel can vary between 4 and 64, depending on the latency setting of the device. Bandwidth usage is about 6 Mbps per typical unicast audio flow.
+
 • Bandwidth for multicast flows is dependent on the number of audio channels used. Bandwidth is about 1.5 Mbps
 per channel.
+
 • Dante audio cannot be sent over Wi-Fi.
 
 Address| Port| Usage| Type
